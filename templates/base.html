@@ -1,0 +1,73 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Campus Creatives helps student creatives find collaborators, organize projects, and showcase finished work.">
+  <title>{% block title %}Campus Creatives{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = {theme: {extend: {colors: {accent: '#f45b24', ink: '#11110f', paper: '#f7f4ee'}}}}</script>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <script src="{% static 'js/app.js' %}" defer></script>
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="min-h-screen antialiased">
+  <header class="sticky top-0 z-40 border-b border-black/10 bg-[#f7f4ee]/95 backdrop-blur">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8" aria-label="Main navigation">
+      <a href="{% url 'core:landing' %}" class="flex items-center gap-2 font-black tracking-tight">
+        <span class="brand-mark flex h-9 w-9 items-center justify-center rounded-xl text-lg" aria-hidden="true">✦</span>
+        <span>Campus Creatives</span>
+      </a>
+      <div class="hidden items-center gap-7 md:flex">
+        <a class="text-sm font-bold hover:text-accent" href="{% url 'ideas:list' %}">Ideas</a>
+        <a class="text-sm font-bold hover:text-accent" href="{% url 'creatives:list' %}">Creatives</a>
+        <a class="text-sm font-bold hover:text-accent" href="{% url 'showcase:list' %}">Showcase</a>
+        {% if user.is_authenticated %}
+          <a class="text-sm font-bold hover:text-accent" href="{% url 'projects:list' %}">My projects</a>
+          <a class="avatar h-9 w-9 text-sm" href="{% url 'accounts:settings' %}" aria-label="Account settings">
+            {% if user.profile.photo %}<img src="{{ user.profile.photo.url }}" alt="">{% else %}{{ user.profile.name|slice:':1'|upper }}{% endif %}
+          </a>
+        {% else %}
+          <a class="text-sm font-bold hover:text-accent" href="{% url 'accounts:login' %}">Log in</a>
+          <a class="btn-secondary" href="{% url 'accounts:register' %}">Join the community</a>
+        {% endif %}
+      </div>
+      <button data-menu-button class="flex h-10 w-10 items-center justify-center rounded-full border border-black/15 md:hidden" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">☰</button>
+    </nav>
+    <div id="mobile-menu" data-mobile-menu class="hidden border-t border-black/10 bg-[#f7f4ee] px-4 py-4 md:hidden">
+      <div class="grid gap-2 text-sm font-bold">
+        <a class="rounded-lg px-3 py-2 hover:bg-white" href="{% url 'ideas:list' %}">Explore ideas</a>
+        <a class="rounded-lg px-3 py-2 hover:bg-white" href="{% url 'creatives:list' %}">Discover creatives</a>
+        <a class="rounded-lg px-3 py-2 hover:bg-white" href="{% url 'showcase:list' %}">Showcase</a>
+        {% if user.is_authenticated %}
+          <a class="rounded-lg px-3 py-2 hover:bg-white" href="{% url 'core:dashboard' %}">Dashboard</a>
+          <a class="rounded-lg px-3 py-2 hover:bg-white" href="{% url 'projects:list' %}">My projects</a>
+          <a class="rounded-lg px-3 py-2 hover:bg-white" href="{% url 'accounts:settings' %}">Profile settings</a>
+          <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="w-full rounded-lg px-3 py-2 text-left hover:bg-white" type="submit">Log out</button></form>
+        {% else %}
+          <a class="rounded-lg px-3 py-2 hover:bg-white" href="{% url 'accounts:login' %}">Log in</a>
+          <a class="btn-primary mt-2" href="{% url 'accounts:register' %}">Join Campus Creatives</a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  {% if messages %}
+    <div class="mx-auto max-w-7xl space-y-2 px-4 pt-4 sm:px-6 lg:px-8" aria-live="polite">
+      {% for message in messages %}
+        <div class="rounded-xl border px-4 py-3 text-sm font-semibold {% if message.tags == 'error' %}border-red-300 bg-red-50 text-red-900{% elif message.tags == 'success' %}border-green-300 bg-green-50 text-green-900{% else %}border-black/10 bg-white{% endif %}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <main>{% block content %}{% endblock %}</main>
+
+  <footer class="mt-20 border-t border-black/10 bg-[#11110f] text-white">
+    <div class="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-2 lg:px-8">
+      <div><div class="text-lg font-black">Campus Creatives</div><p class="mt-2 max-w-sm text-sm text-white/60">Ideas to life, together. A platform by Decreaviator Campus Creative Agency.</p></div>
+      <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold md:justify-end"><a href="{% url 'ideas:list' %}">Ideas</a><a href="{% url 'creatives:list' %}">Creatives</a><a href="{% url 'showcase:list' %}">Showcase</a>{% if user.is_staff %}<a href="{% url 'admin:index' %}">Admin</a>{% endif %}</div>
+    </div>
+  </footer>
+</body>
+</html>

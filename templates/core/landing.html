@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Campus Creatives — Ideas to life, together{% endblock %}
+{% block content %}
+<section class="overflow-hidden border-b border-black/10">
+  <div class="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:px-8">
+    <div>
+      <div class="eyebrow mb-5 flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-accent"></span> Built for campus creators</div>
+      <h1 class="display-face max-w-3xl text-6xl leading-[.94] sm:text-7xl lg:text-8xl">Your next idea needs a <em class="text-accent">team.</em></h1>
+      <p class="mt-7 max-w-xl text-lg leading-8 text-black/65">Find the right creative collaborators, move the work forward, and give every finished project a place to shine.</p>
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        {% if user.is_authenticated %}<a href="{% url 'ideas:create' %}" class="btn-primary">Post your idea <span class="ml-2">→</span></a><a href="{% url 'core:dashboard' %}" class="btn-quiet">Open dashboard</a>{% else %}<a href="{% url 'accounts:register' %}" class="btn-primary">Start creating <span class="ml-2">→</span></a><a href="{% url 'ideas:list' %}" class="btn-quiet">Explore open ideas</a>{% endif %}
+      </div>
+    </div>
+    <div class="rule-grid relative min-h-[430px] rounded-[2rem] border border-black/10 p-5 sm:p-8">
+      <div class="orange-card absolute right-4 top-4 w-[72%] rotate-2 rounded-3xl p-5 shadow-xl sm:right-8 sm:top-7">
+        <div class="eyebrow">Open idea</div><h2 class="mt-5 text-2xl font-black">Short film for campus founders</h2><p class="mt-3 text-sm leading-6 text-black/70">Looking for visual storytellers to turn founder journeys into a five-minute documentary.</p><div class="mt-5 flex flex-wrap gap-2"><span class="badge bg-black text-white">Video editing</span><span class="badge bg-black text-white">Sound</span></div>
+      </div>
+      <div class="ink-card absolute bottom-8 left-4 w-[76%] -rotate-2 rounded-3xl p-5 shadow-xl sm:left-8">
+        <div class="flex items-center justify-between"><span class="eyebrow text-white/50">Project board</span><span class="badge bg-green-400/20 text-green-300">3 teammates</span></div>
+        <div class="mt-5 grid grid-cols-3 gap-2 text-xs font-bold"><div class="rounded-xl bg-white/10 p-3">To do<br><span class="mt-3 block text-white/50">Write treatment</span></div><div class="rounded-xl bg-white/10 p-3">Working<br><span class="mt-3 block text-white/50">Location shots</span></div><div class="rounded-xl bg-white/10 p-3">Done<br><span class="mt-3 block text-white/50">Moodboard ✓</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+  <div class="grid gap-5 md:grid-cols-3">
+    <article class="paper-card rounded-3xl p-6"><span class="eyebrow text-accent">01 · Find</span><h2 class="mt-10 text-2xl font-black">Meet your missing piece.</h2><p class="mt-3 text-sm leading-6 text-black/60">Browse skills and campuses, or let an idea surface available creatives who match what it needs.</p></article>
+    <article class="paper-card rounded-3xl p-6"><span class="eyebrow text-accent">02 · Make</span><h2 class="mt-10 text-2xl font-black">Give the work a home.</h2><p class="mt-3 text-sm leading-6 text-black/60">Turn an accepted collaboration into a focused workspace with tasks, ownership, deadlines, and discussion.</p></article>
+    <article class="paper-card rounded-3xl p-6"><span class="eyebrow text-accent">03 · Show</span><h2 class="mt-10 text-2xl font-black">Credit every contributor.</h2><p class="mt-3 text-sm leading-6 text-black/60">Publish completed work to the showcase with the team and their roles kept front and centre.</p></article>
+  </div>
+</section>
+
+{% if featured_ideas %}
+<section class="border-y border-black/10 bg-white/60">
+  <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="mb-8 flex items-end justify-between gap-4"><div><div class="eyebrow text-accent">Start somewhere</div><h2 class="display-face mt-2 text-4xl sm:text-5xl">Ideas looking for talent.</h2></div><a class="hidden text-sm font-black sm:block" href="{% url 'ideas:list' %}">See every idea →</a></div>
+    <div class="grid gap-4 md:grid-cols-3">{% for idea in featured_ideas %}<a href="{{ idea.get_absolute_url }}" class="paper-card group rounded-2xl p-5 transition hover:-translate-y-1"><div class="flex items-center justify-between"><span class="badge badge-orange">{{ idea.get_budget_type_display }}</span><span class="text-xs font-bold text-black/45">{{ idea.deadline|date:'M j' }}</span></div><h3 class="mt-7 text-xl font-black group-hover:text-accent">{{ idea.title }}</h3><p class="mt-2 line-clamp-2 text-sm leading-6 text-black/60">{{ idea.description }}</p><div class="mt-5 text-xs font-bold">{{ idea.campus.name }}</div></a>{% endfor %}</div>
+    <a class="btn-quiet mt-6 sm:hidden" href="{% url 'ideas:list' %}">See every idea</a>
+  </div>
+</section>
+{% endif %}
+
+<section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+  <div class="orange-card rounded-[2rem] px-6 py-12 text-center sm:px-12 sm:py-16"><div class="eyebrow">A better way to make together</div><h2 class="display-face mx-auto mt-4 max-w-3xl text-4xl sm:text-6xl">Don’t leave the good idea in the group chat.</h2><p class="mx-auto mt-5 max-w-xl text-black/65">Post it, find your people, and move it all the way to finished.</p><a class="btn-secondary mt-7" href="{% if user.is_authenticated %}{% url 'ideas:create' %}{% else %}{% url 'accounts:register' %}{% endif %}">{% if user.is_authenticated %}Post an idea{% else %}Create your profile{% endif %}</a></div>
+</section>
+{% endblock %}
