@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Discover creatives — Campus Creatives{% endblock %}
+{% block content %}
+<div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+  <div class="max-w-2xl"><div class="eyebrow text-accent">The creative directory</div><h1 class="display-face mt-2 text-5xl sm:text-6xl">Find your people.</h1><p class="mt-4 leading-7 text-black/60">Explore campus creatives by craft, campus, and current availability.</p></div>
+  <form method="get" class="form-shell paper-card mt-8 grid gap-3 rounded-2xl p-4 md:grid-cols-[1.5fr_1fr_1fr_auto]">
+    <div><label for="q">Search</label><input id="q" name="q" value="{{ filters.q }}" placeholder="Name, bio, or skill"></div>
+    <div><label for="campus">Campus</label><select id="campus" name="campus"><option value="">All campuses</option>{% for campus in campuses %}<option value="{{ campus.pk }}" {% if filters.campus == campus.pk|stringformat:'s' %}selected{% endif %}>{{ campus.name }}</option>{% endfor %}</select></div>
+    <div><label for="skill">Skill</label><select id="skill" name="skill"><option value="">All skills</option>{% for skill in skills %}<option value="{{ skill.pk }}" {% if filters.skill == skill.pk|stringformat:'s' %}selected{% endif %}>{{ skill.name }}</option>{% endfor %}</select></div>
+    <div class="flex items-end"><button class="btn-secondary w-full" type="submit">Filter</button></div>
+    <label class="flex items-center text-sm md:col-span-4"><input type="checkbox" name="availability" value="available" {% if filters.availability == 'available' %}checked{% endif %}> Available now only</label>
+  </form>
+  <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {% for profile in profiles %}
+      <a href="{{ profile.get_absolute_url }}" class="paper-card group rounded-2xl p-5 transition hover:-translate-y-1">
+        <div class="flex items-start justify-between"><div class="avatar h-14 w-14 text-xl">{% if profile.photo %}<img src="{{ profile.photo.url }}" alt="{{ profile.name }}">{% else %}{{ profile.name|slice:':1'|upper }}{% endif %}</div><span class="badge {% if profile.is_available %}badge-green{% else %}badge-neutral{% endif %}">{% if profile.is_available %}Available{% else %}Busy{% endif %}</span></div>
+        <h2 class="mt-5 text-xl font-black group-hover:text-accent">{{ profile.name }} {% if profile.is_verified %}<span class="text-sm text-accent" title="Verified student">●</span>{% endif %}</h2>
+        <p class="mt-1 text-sm font-semibold text-black/50">{{ profile.campus|default:'Campus not added' }}</p>
+        <p class="mt-4 line-clamp-3 min-h-[4.5rem] text-sm leading-6 text-black/60">{{ profile.bio|default:'This creative is still writing their introduction.' }}</p>
+        <div class="mt-5 flex flex-wrap gap-2">{% for skill in profile.skills.all %}<span class="badge badge-neutral">{{ skill.name }}</span>{% empty %}<span class="text-xs text-black/40">Skills coming soon</span>{% endfor %}</div>
+      </a>
+    {% empty %}
+      <div class="col-span-full rounded-3xl border border-dashed border-black/25 px-6 py-14 text-center"><h2 class="text-xl font-black">No creatives match those filters yet.</h2><p class="mt-2 text-sm text-black/55">Try a broader search or clear one of the filters.</p><a class="btn-quiet mt-5" href="{% url 'creatives:list' %}">Clear filters</a></div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
