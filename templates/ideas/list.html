@@ -3,14 +3,14 @@
 {% block content %}
 <section class="directory-hero" aria-labelledby="ideas-heading">
   <div class="directory-hero__content">
-    <div class="eyebrow">Open calls</div>
-    <h1 id="ideas-heading" class="display-face mt-3 text-5xl leading-none sm:text-7xl">Ideas need makers.</h1>
-    <p class="mt-5 max-w-2xl text-base leading-7 sm:text-lg">See what campus teams are trying to bring to life, then offer the skill that gets it moving.</p>
-    {% if user.is_authenticated %}<a href="{% url 'ideas:create' %}" class="btn-primary mt-7">+ Post an idea</a>{% else %}<a href="{% url 'accounts:register' %}" class="btn-primary mt-7">Join to post</a>{% endif %}
+    <div class="directory-hero__kicker">Open calls</div>
+    <h1 id="ideas-heading" class="directory-hero__title display-face">Ideas need makers.</h1>
+    <p class="directory-hero__summary">See what campus teams are trying to bring to life, then offer the skill that gets it moving.</p>
+    {% if user.is_authenticated %}<a href="{% url 'ideas:create' %}" class="directory-hero__action btn-primary">+ Post an idea</a>{% else %}<a href="{% url 'accounts:register' %}" class="directory-hero__action btn-primary">Join to post</a>{% endif %}
   </div>
 </section>
-<div class="mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
-  <form method="get" class="form-shell paper-card relative z-10 -mt-8 grid gap-3 rounded-2xl p-4 md:grid-cols-[1.5fr_1fr_1fr_1fr_auto]">
+<div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+  <form method="get" class="form-shell paper-card grid gap-3 rounded-2xl p-4 md:grid-cols-[1.5fr_1fr_1fr_1fr_auto]">
     <div><label for="q">Search</label><input id="q" name="q" value="{{ filters.q }}" placeholder="What do you want to make?"></div>
     <div><label for="campus">Campus</label><select id="campus" name="campus"><option value="">All campuses</option>{% for campus in campuses %}<option value="{{ campus.pk }}" {% if filters.campus == campus.pk|stringformat:'s' %}selected{% endif %}>{{ campus.name }}</option>{% endfor %}</select></div>
     <div><label for="skill">Skill needed</label><select id="skill" name="skill"><option value="">All skills</option>{% for skill in skills %}<option value="{{ skill.pk }}" {% if filters.skill == skill.pk|stringformat:'s' %}selected{% endif %}>{{ skill.name }}</option>{% endfor %}</select></div>

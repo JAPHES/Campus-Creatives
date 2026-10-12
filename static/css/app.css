@@ -54,11 +54,13 @@ body { background: var(--paper); color: var(--ink); }
 .rule-grid { background-image: linear-gradient(rgba(17,17,15,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(17,17,15,.06) 1px, transparent 1px); background-size: 26px 26px; }
 .directory-hero {
   align-items: center;
+  background-color: var(--ink);
   background-image: url("../images/campus-creatives-directory-hero.png");
   background-position: center;
   background-size: cover;
   display: flex;
   isolation: isolate;
+  justify-content: center;
   min-height: clamp(25rem, 52vw, 35rem);
   overflow: hidden;
   position: relative;
@@ -90,14 +92,35 @@ body { background: var(--paper); color: var(--ink); }
   position: relative;
   text-align: center;
   text-shadow: 0 2px 24px rgba(0, 0, 0, .35);
+  width: 100%;
   z-index: 1;
 }
-.directory-hero__content .eyebrow { color: #ff9b72; }
-.directory-hero__content p { color: rgba(255, 254, 250, .78); margin-left: auto; margin-right: auto; }
+.directory-hero__kicker {
+  color: #ff9b72;
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.directory-hero__title {
+  font-size: clamp(3rem, 7vw, 5.25rem);
+  line-height: .96;
+  margin: .75rem auto 0;
+  max-width: 56rem;
+}
+.directory-hero__summary {
+  color: rgba(255, 254, 250, .82);
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  line-height: 1.75;
+  margin: 1.25rem auto 0;
+  max-width: 44rem;
+}
+.directory-hero__action { margin-top: 1.75rem; }
 details > summary { list-style: none; }
 details > summary::-webkit-details-marker { display: none; }
 @media (max-width: 767px) {
   .desktop-only { display: none !important; }
   .directory-hero { background-position: 48% center; min-height: 25rem; }
-  .directory-hero__content { padding-bottom: 5rem; padding-top: 4rem; }
+  .directory-hero__content { padding-bottom: 4.5rem; padding-top: 4.5rem; }
+  .directory-hero__title { font-size: clamp(2.8rem, 14vw, 4rem); }
 }
