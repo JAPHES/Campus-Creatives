@@ -8,66 +8,138 @@
   <title>{% block title %}Campus Creatives{% endblock %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config = {theme: {extend: {colors: {accent: '#f45b24', ink: '#11110f', paper: '#f7f4ee'}}}}</script>
-  <link rel="stylesheet" href="{% static 'css/app.css' %}?v=20261012-directory-hero">
-  <script src="{% static 'js/app.js' %}" defer></script>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}?v=20261012-sidebar-shell">
+  <script src="{% static 'js/app.js' %}?v=20261012-sidebar-shell" defer></script>
   {% block extra_head %}{% endblock %}
 </head>
 <body class="min-h-screen antialiased">
-  <header class="sticky top-0 z-40 border-b border-black/10 bg-[#f7f4ee]/95 backdrop-blur">
-    <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8" aria-label="Main navigation">
-      <a href="{% url 'core:landing' %}" class="flex items-center gap-2 font-black tracking-tight">
-        <span class="brand-mark flex h-9 w-9 items-center justify-center rounded-xl text-lg" aria-hidden="true">✦</span>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <button class="sidebar-backdrop" type="button" data-sidebar-backdrop hidden aria-label="Close navigation"></button>
+
+  <aside id="app-sidebar" class="app-sidebar" data-sidebar aria-label="Site navigation">
+    <div class="sidebar-header">
+      <a href="{% url 'core:landing' %}" class="sidebar-brand" aria-label="Campus Creatives home">
+        <span class="brand-mark sidebar-brand__mark" aria-hidden="true">✦</span>
+        <span>
+          <span class="sidebar-brand__name">Campus Creatives</span>
+          <span class="sidebar-brand__tagline">Ideas to life, together.</span>
+        </span>
+      </a>
+      <button class="sidebar-close" type="button" data-sidebar-close aria-label="Close navigation">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Primary navigation">
+      <div class="sidebar-group">
+        <p class="sidebar-label">Explore</p>
+        <a class="sidebar-link {% if request.resolver_match.namespace == 'core' and request.resolver_match.url_name == 'landing' %}is-active{% endif %}" href="{% url 'core:landing' %}">
+          <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></svg>
+          <span>Home</span>
+        </a>
+        <a class="sidebar-link {% if request.resolver_match.namespace == 'ideas' and request.resolver_match.url_name != 'create' %}is-active{% endif %}" href="{% url 'ideas:list' %}">
+          <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4M8.5 14.5a7 7 0 1 1 7 0c-.9.7-1.5 1.5-1.5 2.5h-4c0-1-.6-1.8-1.5-2.5Z"/></svg>
+          <span>Ideas</span>
+        </a>
+        <a class="sidebar-link {% if request.resolver_match.namespace == 'creatives' %}is-active{% endif %}" href="{% url 'creatives:list' %}">
+          <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM17 11l2 2 4-4"/></svg>
+          <span>Creatives</span>
+        </a>
+        <a class="sidebar-link {% if request.resolver_match.namespace == 'showcase' %}is-active{% endif %}" href="{% url 'showcase:list' %}">
+          <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          <span>Showcase</span>
+        </a>
+      </div>
+
+      {% if user.is_authenticated %}
+        <div class="sidebar-group">
+          <p class="sidebar-label">Your workspace</p>
+          <a class="sidebar-link {% if request.resolver_match.namespace == 'core' and request.resolver_match.url_name == 'dashboard' %}is-active{% endif %}" href="{% url 'core:dashboard' %}">
+            <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            <span>Dashboard</span>
+          </a>
+          <a class="sidebar-link {% if request.resolver_match.namespace == 'projects' %}is-active{% endif %}" href="{% url 'projects:list' %}">
+            <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h7l2 2h9v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M3 7V5a2 2 0 0 1 2-2h4l2 2h3"/></svg>
+            <span>My projects</span>
+          </a>
+          <a class="sidebar-link sidebar-link--accent {% if request.resolver_match.namespace == 'ideas' and request.resolver_match.url_name == 'create' %}is-active{% endif %}" href="{% url 'ideas:create' %}">
+            <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            <span>Post an idea</span>
+          </a>
+        </div>
+      {% endif %}
+
+      {% if user.is_staff %}
+        <div class="sidebar-group">
+          <p class="sidebar-label">Manage</p>
+          <a class="sidebar-link" href="{% url 'admin:index' %}">
+            <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.55V21h-4v-.08A1.7 1.7 0 0 0 8.97 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3.08 14H3v-4h.08A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3.08V3h4v.08A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9 1.7 1.7 0 0 0 20.92 10H21v4h-.08A1.7 1.7 0 0 0 19.4 15Z"/></svg>
+            <span>Django admin</span>
+          </a>
+        </div>
+      {% endif %}
+    </nav>
+
+    <div class="sidebar-account">
+      {% if user.is_authenticated %}
+        <div class="sidebar-user">
+          <span class="avatar sidebar-user__avatar">
+            {% if user.profile.photo %}<img src="{{ user.profile.photo.url }}" alt="">{% else %}{{ user.profile.name|default:user.email|slice:':1'|upper }}{% endif %}
+          </span>
+          <span class="sidebar-user__copy">
+            <strong>{{ user.profile.name|default:user.email }}</strong>
+            <small>{{ user.email }}</small>
+          </span>
+        </div>
+        <div class="sidebar-account__actions">
+          <a class="sidebar-account__link {% if request.resolver_match.namespace == 'accounts' and request.resolver_match.url_name == 'settings' %}is-active{% endif %}" href="{% url 'accounts:settings' %}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l-2.83 2.83a1.7 1.7 0 0 0-1.88-.34A1.7 1.7 0 0 0 14 20.92V21h-4v-.08A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.88.34l-2.83-2.83A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3.08 14H3v-4h.08A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.88l2.83-2.83A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3.08V3h4v.08A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.88-.34l2.83 2.83A1.7 1.7 0 0 0 19.4 9 1.7 1.7 0 0 0 20.92 10H21v4h-.08A1.7 1.7 0 0 0 19.4 15Z"/></svg>
+            <span>Settings</span>
+          </a>
+          <form method="post" action="{% url 'accounts:logout' %}">
+            {% csrf_token %}
+            <button class="sidebar-account__link" type="submit">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/></svg>
+              <span>Log out</span>
+            </button>
+          </form>
+        </div>
+      {% else %}
+        <p class="sidebar-account__prompt">Ready to bring an idea to life?</p>
+        <a class="sidebar-login" href="{% url 'accounts:login' %}">Log in</a>
+        <a class="sidebar-join" href="{% url 'accounts:register' %}">Join the community <span aria-hidden="true">→</span></a>
+      {% endif %}
+    </div>
+  </aside>
+
+  <div class="site-frame">
+    <header class="mobile-topbar">
+      <a href="{% url 'core:landing' %}" class="mobile-brand">
+        <span class="brand-mark mobile-brand__mark" aria-hidden="true">✦</span>
         <span>Campus Creatives</span>
       </a>
-      <div class="hidden items-center gap-7 md:flex">
-        <a class="text-sm font-bold hover:text-accent" href="{% url 'ideas:list' %}">Ideas</a>
-        <a class="text-sm font-bold hover:text-accent" href="{% url 'creatives:list' %}">Creatives</a>
-        <a class="text-sm font-bold hover:text-accent" href="{% url 'showcase:list' %}">Showcase</a>
-        {% if user.is_authenticated %}
-          <a class="text-sm font-bold hover:text-accent" href="{% url 'projects:list' %}">My projects</a>
-          <a class="avatar h-9 w-9 text-sm" href="{% url 'accounts:settings' %}" aria-label="Account settings">
-            {% if user.profile.photo %}<img src="{{ user.profile.photo.url }}" alt="">{% else %}{{ user.profile.name|slice:':1'|upper }}{% endif %}
-          </a>
-        {% else %}
-          <a class="text-sm font-bold hover:text-accent" href="{% url 'accounts:login' %}">Log in</a>
-          <a class="btn-secondary" href="{% url 'accounts:register' %}">Join the community</a>
-        {% endif %}
+      <button class="mobile-menu-button" type="button" data-sidebar-toggle aria-expanded="false" aria-controls="app-sidebar" aria-label="Open navigation">
+        <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+      </button>
+    </header>
+
+    {% if messages %}
+      <div class="mx-auto w-full max-w-7xl space-y-2 px-4 pt-4 sm:px-6 lg:px-8" aria-live="polite">
+        {% for message in messages %}
+          <div class="rounded-xl border px-4 py-3 text-sm font-semibold {% if message.tags == 'error' %}border-red-300 bg-red-50 text-red-900{% elif message.tags == 'success' %}border-green-300 bg-green-50 text-green-900{% else %}border-black/10 bg-white{% endif %}">{{ message }}</div>
+        {% endfor %}
       </div>
-      <button data-menu-button class="flex h-10 w-10 items-center justify-center rounded-full border border-black/15 md:hidden" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">☰</button>
-    </nav>
-    <div id="mobile-menu" data-mobile-menu class="hidden border-t border-black/10 bg-[#f7f4ee] px-4 py-4 md:hidden">
-      <div class="grid gap-2 text-sm font-bold">
-        <a class="rounded-lg px-3 py-2 hover:bg-white" href="{% url 'ideas:list' %}">Explore ideas</a>
-        <a class="rounded-lg px-3 py-2 hover:bg-white" href="{% url 'creatives:list' %}">Discover creatives</a>
-        <a class="rounded-lg px-3 py-2 hover:bg-white" href="{% url 'showcase:list' %}">Showcase</a>
-        {% if user.is_authenticated %}
-          <a class="rounded-lg px-3 py-2 hover:bg-white" href="{% url 'core:dashboard' %}">Dashboard</a>
-          <a class="rounded-lg px-3 py-2 hover:bg-white" href="{% url 'projects:list' %}">My projects</a>
-          <a class="rounded-lg px-3 py-2 hover:bg-white" href="{% url 'accounts:settings' %}">Profile settings</a>
-          <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="w-full rounded-lg px-3 py-2 text-left hover:bg-white" type="submit">Log out</button></form>
-        {% else %}
-          <a class="rounded-lg px-3 py-2 hover:bg-white" href="{% url 'accounts:login' %}">Log in</a>
-          <a class="btn-primary mt-2" href="{% url 'accounts:register' %}">Join Campus Creatives</a>
-        {% endif %}
+    {% endif %}
+
+    <main id="main-content" class="site-main">{% block content %}{% endblock %}</main>
+
+    <footer class="site-footer">
+      <div class="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-2 lg:px-8">
+        <div><div class="text-lg font-black">Campus Creatives</div><p class="mt-2 max-w-sm text-sm text-white/60">Ideas to life, together. A platform by Decreaviator Campus Creative Agency.</p></div>
+        <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold md:justify-end"><a href="{% url 'ideas:list' %}">Ideas</a><a href="{% url 'creatives:list' %}">Creatives</a><a href="{% url 'showcase:list' %}">Showcase</a>{% if user.is_staff %}<a href="{% url 'admin:index' %}">Admin</a>{% endif %}</div>
       </div>
-    </div>
-  </header>
-
-  {% if messages %}
-    <div class="mx-auto max-w-7xl space-y-2 px-4 pt-4 sm:px-6 lg:px-8" aria-live="polite">
-      {% for message in messages %}
-        <div class="rounded-xl border px-4 py-3 text-sm font-semibold {% if message.tags == 'error' %}border-red-300 bg-red-50 text-red-900{% elif message.tags == 'success' %}border-green-300 bg-green-50 text-green-900{% else %}border-black/10 bg-white{% endif %}">{{ message }}</div>
-      {% endfor %}
-    </div>
-  {% endif %}
-
-  <main>{% block content %}{% endblock %}</main>
-
-  <footer class="mt-20 border-t border-black/10 bg-[#11110f] text-white">
-    <div class="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-2 lg:px-8">
-      <div><div class="text-lg font-black">Campus Creatives</div><p class="mt-2 max-w-sm text-sm text-white/60">Ideas to life, together. A platform by Decreaviator Campus Creative Agency.</p></div>
-      <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold md:justify-end"><a href="{% url 'ideas:list' %}">Ideas</a><a href="{% url 'creatives:list' %}">Creatives</a><a href="{% url 'showcase:list' %}">Showcase</a>{% if user.is_staff %}<a href="{% url 'admin:index' %}">Admin</a>{% endif %}</div>
-    </div>
-  </footer>
+    </footer>
+  </div>
 </body>
 </html>
