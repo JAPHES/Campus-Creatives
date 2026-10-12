@@ -126,7 +126,7 @@ body.sidebar-open { overflow: hidden; }
   display: flex;
   isolation: isolate;
   justify-content: center;
-  min-height: clamp(25rem, 52vw, 35rem);
+  min-height: clamp(13rem, 21vw, 16.5rem);
   overflow: hidden;
   position: relative;
 }
@@ -153,7 +153,7 @@ body.sidebar-open { overflow: hidden; }
   color: var(--white);
   margin: 0 auto;
   max-width: 58rem;
-  padding: 5rem 1.25rem 6rem;
+  padding: 2.25rem 1.25rem 2.5rem;
   position: relative;
   text-align: center;
   text-shadow: 0 2px 24px rgba(0, 0, 0, .35);
@@ -168,26 +168,26 @@ body.sidebar-open { overflow: hidden; }
   text-transform: uppercase;
 }
 .directory-hero__title {
-  font-size: clamp(3rem, 7vw, 5.25rem);
+  font-size: clamp(2.35rem, 4.8vw, 3.8rem);
   line-height: .96;
-  margin: .75rem auto 0;
+  margin: .5rem auto 0;
   max-width: 56rem;
 }
 .directory-hero__summary {
   color: rgba(255, 254, 250, .82);
-  font-size: clamp(1rem, 1.6vw, 1.15rem);
-  line-height: 1.75;
-  margin: 1.25rem auto 0;
+  font-size: clamp(.92rem, 1.25vw, 1rem);
+  line-height: 1.55;
+  margin: .7rem auto 0;
   max-width: 44rem;
 }
-.directory-hero__action { margin-top: 1.75rem; }
+.directory-hero__action { margin-top: 1rem; }
 details > summary { list-style: none; }
 details > summary::-webkit-details-marker { display: none; }
 @media (max-width: 767px) {
   .desktop-only { display: none !important; }
-  .directory-hero { background-position: 48% center; min-height: 25rem; }
-  .directory-hero__content { padding-bottom: 4.5rem; padding-top: 4.5rem; }
-  .directory-hero__title { font-size: clamp(2.8rem, 14vw, 4rem); }
+  .directory-hero { background-position: 48% center; min-height: 0; }
+  .directory-hero__content { padding: 2.15rem 1rem 2.35rem; }
+  .directory-hero__title { font-size: clamp(2.25rem, 10vw, 3rem); }
 }
 @media (min-width: 1024px) {
   body.sidebar-open { overflow: auto; }
