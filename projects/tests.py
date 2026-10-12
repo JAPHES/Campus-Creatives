@@ -75,6 +75,13 @@ class CollaborationFlowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Plan the shoot")
 
+    def test_my_projects_uses_the_shared_centered_hero(self):
+        self.client.force_login(self.owner)
+        response = self.client.get(reverse("projects:list"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'class="directory-hero"')
+        self.assertContains(response, 'id="projects-heading" class="directory-hero__title display-face"')
+
     def test_unrelated_member_cannot_edit_another_members_task(self):
         project = Project.objects.create(idea=self.idea, owner=self.owner)
         ProjectMembership.objects.create(project=project, user=self.owner, role="Owner", is_owner=True)
