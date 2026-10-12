@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}Discover creatives — Campus Creatives{% endblock %}
 {% block content %}
-<div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-  <div class="max-w-2xl"><div class="eyebrow text-accent">The creative directory</div><h1 class="display-face mt-2 text-5xl sm:text-6xl">Find your people.</h1><p class="mt-4 leading-7 text-black/60">Explore campus creatives by craft, campus, and current availability.</p></div>
-  <form method="get" class="form-shell paper-card mt-8 grid gap-3 rounded-2xl p-4 md:grid-cols-[1.5fr_1fr_1fr_auto]">
+<section class="directory-hero" aria-labelledby="creatives-heading">
+  <div class="directory-hero__content">
+    <div class="eyebrow">The creative directory</div>
+    <h1 id="creatives-heading" class="display-face mt-3 text-5xl leading-none sm:text-7xl">Find your people.</h1>
+    <p class="mt-5 max-w-2xl text-base leading-7 sm:text-lg">Explore campus creatives by craft, campus, and current availability.</p>
+  </div>
+</section>
+<div class="mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
+  <form method="get" class="form-shell paper-card relative z-10 -mt-8 grid gap-3 rounded-2xl p-4 md:grid-cols-[1.5fr_1fr_1fr_auto]">
     <div><label for="q">Search</label><input id="q" name="q" value="{{ filters.q }}" placeholder="Name, bio, or skill"></div>
     <div><label for="campus">Campus</label><select id="campus" name="campus"><option value="">All campuses</option>{% for campus in campuses %}<option value="{{ campus.pk }}" {% if filters.campus == campus.pk|stringformat:'s' %}selected{% endif %}>{{ campus.name }}</option>{% endfor %}</select></div>
     <div><label for="skill">Skill</label><select id="skill" name="skill"><option value="">All skills</option>{% for skill in skills %}<option value="{{ skill.pk }}" {% if filters.skill == skill.pk|stringformat:'s' %}selected{% endif %}>{{ skill.name }}</option>{% endfor %}</select></div>
